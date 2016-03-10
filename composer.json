@@ -1,0 +1,45 @@
+{
+    "name": "df007df/swoole-server-manager",
+    "description": "swoole-server-manager",
+    "version": "1.0.0",
+    "keywords": [
+        "swoole",
+        "server",
+        "manager"
+    ],
+    "homepage": "http://www.github.com",
+    "type": "project",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "duanfei",
+            "email": "duanfeisj@sina.com",
+            "homepage": "http://blog.duanfei.top",
+            "role": "lead"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "chrisboulton/php-resque": "1.2.x"
+
+    },
+    "autoload": {
+        "psr-4": {
+            "ServerManager\\": "src/"
+        }
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://packagist.phpcomposer.com"
+        },
+        {
+            "packagist": false
+        }
+    ],
+    "extra": {
+        "branch-alias": {
+            "dev-trunk": "1.0.x-dev"
+        }
+    }
+}
