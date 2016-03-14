@@ -7,7 +7,7 @@ swoole 服务管理框架
 * 特色
 * 流程图
 * 运行
-* todo
+* TODO
 
 
 1. 说明
@@ -37,18 +37,23 @@ swoole 服务管理框架
 
 3. 流程图
 --------------
-
+![流程图](./swoole_server.png)
 
 
 4. 运行
 --------------
 一个简单的demo
 
+运行
+
     php demo/simple.php
+   
+   
+code
 
-   <?php
+    <?php
 
-   require dirname(__DIR__) . '/autoload.php';
+    require dirname(__DIR__) . '/autoload.php';
 
 
     //队列的基本设置
@@ -93,11 +98,12 @@ swoole 服务管理框架
 
 
 
-6. todo
+6. TODO
 --------------
 + 子进程增加接口实现
 + 子进程删除接口实现
 + 子进程异常，会堵塞master与子进程间的通信
++ 队列现在只有一个进程处理，考虑任意多进程处理
 
 
 
