@@ -11,7 +11,7 @@ swoole 服务管理框架
 
 1. 说明
 --------------
-像后台常驻服务，agent这类的用go开发都比较多。优点就不说了(性能，兼容好，开发相对快)。
+    像后台常驻服务，agent这类的用go开发都比较多。优点就不说了(性能，兼容好，开发相对快)。
 最近要写个后台服务，可能还是php写多了(go写了点还是不顺手，怪我笨)，还是用php写吧，刚好可以用swoole处理进程之间的工作，
 所以便有了此项目。
 
@@ -38,9 +38,53 @@ swoole 服务管理框架
 --------------
 
 
+
 4. 运行
 --------------
+一个简单的demo
 
+    php demo/simple.php
+
+   <?php
+
+   require dirname(__DIR__) . '/autoload.php';
+
+
+    //队列的基本设置
+    ServerManager\Queue\Queue::setConfig([
+        'host' => 'localhost:6379',
+        'name' => 'default',
+        'classBase' => 'ServerManager\demo\simple\queue'
+    ]);
+    
+    //框架实例
+    $server = new ServerManager\Manager\Server();
+    
+    //设置服务api类
+    $server->setApiClassName('ServerManager\demo\simple\TestController');
+    
+    //设置 process 设置
+    $server->setProcessConfig([
+    
+        //服务子进程名称，唯一，如果进程类代码都一样，还是请设置不同的名字。
+        'process_name' => [
+            //子进程类
+            'class' => 'ServerManager\demo\simple\process\DemoServer',
+            //子进程启动入参
+            'params' => ['data' => 1]
+    
+        ],
+    
+        'process_name_two' => [
+            'class' => 'ServerManager\demo\simple\process\DemoServer',
+            'params' => ['data' => 2]
+        ]
+    
+    
+    ]);
+    
+    //启动唠
+    $server->run();
 
 
 5. 扩展
@@ -52,6 +96,8 @@ swoole 服务管理框架
 --------------
 + 子进程增加接口实现
 + 子进程删除接口实现
++ 子进程异常，会堵塞master与子进程间的通信
+
 
 
 
