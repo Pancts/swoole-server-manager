@@ -9,21 +9,38 @@ abstract class Process
 {
 
 
+    /**
+     * 进程名称
+     * @var string
+     */
     public $name = '';
 
+
+    /**
+     * 进程启动参数
+     * @var array
+     */
     public $params = [];
 
+
+    /**
+     * 进程类名称
+     * @var string
+     */
     public $className = '';
 
 
     /**
+     * 进程实例
      * @var swoole_process
      */
     public $process = null;
 
 
-
-
+    /**
+     * 进程初始化
+     * @param swoole_process $worker
+     */
     public function init(swoole_process $worker)
     {
 

@@ -8,6 +8,10 @@ use swoole_http_server;
 use ServerManager\Api\HttpEvent;
 use ServerManager\Process\Command;
 
+/**
+ * 服务管理主进程
+ * @package ServerManager\Manager
+ */
 class Server
 {
 
@@ -16,15 +20,29 @@ class Server
      */
     private $_server = null;
 
+    /**
+     * 进程配置list
+     * @var array
+     */
     private $_processConfig = [];
 
+    /**
+     * 进程实例
+     * @var array
+     */
     private $_process = [];
 
-    private $tasks = [];
 
+    /**
+     * 接口类名 namespace
+     * @var string
+     */
     private $_apiClassName = '';
 
 
+    /**
+     * 执行入口
+     */
     public function run()
     {
 
@@ -67,7 +85,7 @@ class Server
 
 
     /**
-     * 准备工作
+     * 服务启动准备工作
      */
     public function prepare()
     {
@@ -78,15 +96,10 @@ class Server
 
         $this->getSwooleServer()->on('pipeMessage', [$this, 'pipeMessageAll']);
 
-        $this->getSwooleServer()->on('ManagerStart', function ($serv) {
-            //global $argv;
-            //swoole_set_process_name("php {$argv[0]}: manager");
-        });
-
 
         $this->getSwooleServer()->on('start', [$this, 'onStart']);
 
-        $this->getSwooleServer()->on('WorkerStart', [$this, 'my_onWorkerStart']);
+        $this->getSwooleServer()->on('WorkerStart', [$this, 'onWorkerStart']);
 
         $this->prepareApi();
 
@@ -104,13 +117,17 @@ class Server
 
     }
 
-    function my_onWorkerStart(swoole_server $serv, $worker_id)
+    function onWorkerStart(swoole_server $serv, $worker_id)
     {
 
         //echo "#{$serv->worker_id} message from #$worker_id \n";
 
     }
 
+
+    /**
+     * 准备需要启动的进程
+     */
     public function prepareProcess()
     {
 
@@ -138,6 +155,9 @@ class Server
     }
 
 
+    /**
+     * 准备队列进程
+     */
     public function prepareQueue()
     {
 
@@ -150,6 +170,9 @@ class Server
     }
 
 
+    /**
+     * 主进程绑定api路由
+     */
     public function prepareApi()
     {
 
@@ -192,7 +215,7 @@ class Server
     }
 
     /**
-     *
+     * 向所有子进程发送消息
      * @param string $command
      * @param array $data
      */
@@ -208,6 +231,10 @@ class Server
 
     }
 
+    /**
+     * 获取所有子进程返回的命令执行结果
+     * @return array
+     */
     public function getCommandAll()
     {
 
@@ -229,7 +256,7 @@ class Server
     }
 
     /**
-     *
+     * 获取当前进程实例
      * @return \ServerManager\Process\Process
      */
     public function getProcess()

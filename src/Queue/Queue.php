@@ -30,7 +30,7 @@ abstract class Queue
 
 
     /**
-     * 发送队列
+     * 发送队列task
      * @param string $qname
      * @param array $data
      */
@@ -44,7 +44,7 @@ abstract class Queue
 
 
     /**
-     * 队列进程 入口方法
+     * 队列进程 回调方法
      * @param swoole_process $worker
      */
     public static function runProcess(swoole_process $worker)
