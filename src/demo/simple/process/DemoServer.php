@@ -60,6 +60,7 @@ class DemoServer extends \ServerManager\Process\Process
             'date' => date('Y-m-d H:i:s')
         ];
 
+        //子进程内投递队列，第一个参数：队列work类名
         $this->sendQueue('EmailWork', $data);
 
 

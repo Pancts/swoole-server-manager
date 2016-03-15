@@ -94,19 +94,100 @@ code
     
 
 ####api访问
+访问 http://127.0.0.1:9501/api/index
+路由指到 src/demo/simple/TestController.php => actionIndex
+TestController内可进行扩展。
 
-####api扩展
 
 ####主进程与子进程通信
+访问 http://127.0.0.1:9501/api/status
+路由指到 src/demo/simple/TestController.php => actionStatus
+
+	public function actionStatus()
+	{
+
+		//向所有子进程发送status命令
+		$this->_manager->sendCommandAll('status');
+
+        //堵塞接收所有子进程返回status命令的执行结果
+        $result = $this->_manager->getCommandAll();
+
+
+        var_dump($result);
+
+        return $result;
+
+	}
+    
+    
+子进程处理`status`命令，返回执行结果
+src/demo/simple/process/DemoServer.php => commandStatus
+     
+    public function commandStatus()
+    {
+
+        return [
+            'name' => $this->name,
+            'count' => $this->params['data'] * 2,
+            'error' => 20
+        ];
+    }
 
 ####子进程内队列的使用
-
-5. 扩展
---------------
-
+访问 http://127.0.0.1:9501/api/queue
+路由指到 src/demo/simple/TestController.php => actionQueue
 
 
-6. TODO
+	/**
+     * 测试 process 发送 queue
+     */
+    public function actionQueue()
+    {
+
+
+        $this->_manager->sendCommand('process_name_two', 'queue', 'queue_1');
+
+    }
+    
+    
+子进程`process_name_two`执行`queue`命令
+    
+    public function commandQueue()
+    {
+
+        $data = [
+            'email' => 'test@qq.com',
+            'text' => 'hello ! ' . $this->name,
+            'date' => date('Y-m-d H:i:s')
+        ];
+
+        //子进程内投递队列，第一个参数：队列work类名
+        $this->sendQueue('EmailWork', $data);
+
+    }
+    
+队列`EmailWork` 对应文件 ServerManager\demo\simple\queue\EmailWork
+`work`写法参照php-resque
+
+		
+	class EmailWork extends \ServerManager\Queue\Queue
+	{
+	
+	
+	    public function perform()
+	    {
+	        // Work work work
+	        var_dump($this->args);
+	    }
+	
+	
+	
+	}
+    
+
+
+
+5. TODO
 --------------
 + 子进程增加接口实现
 + 子进程删除接口实现
